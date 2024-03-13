@@ -36,6 +36,9 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(400);
       res.end('Not Found');
     }
+  } else {
+    res.writeHead(400);
+    res.end('Not Found');
   }
 });
 const PORT = 3000;
