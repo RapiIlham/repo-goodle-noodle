@@ -13,14 +13,13 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
-    broadcast(msg.toString())
+    broadcast(msg.toString(), req.url);
   })
 });
 
-function broadcast(msg) {      
+function broadcast(msg, senderURL) {      
   for(const client of wss.clients){
-    if(client.readyState === ws.OPEN){
-      console.log(client.id);
+    if(client.readyState === ws.OPEN && client.id == senderURL){
       client.send(`${msg}`)
     }
   }
