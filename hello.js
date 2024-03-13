@@ -3,7 +3,9 @@ const url = require('url');
 const ws = require('ws');
 const server = http.createServer(async (req, res) => {
   if(req.url.includes('getMem')){
-    var con = new WebSocket('wss://server.moddereducation.com');
+    const params = url.parse(req.url, true).query;
+    const keyword = params.id;
+    var con = new WebSocket('wss://server.moddereducation.com/'+id);
     con.onopen = function(){
       con.send('getMem');
     }
@@ -20,10 +22,12 @@ const server = http.createServer(async (req, res) => {
         } else {
           res.writeHead(400);
           res.end('Error');
+          con.close();
         }
       } else {
         res.writeHead(400);
         res.end('Error');
+        con.close()
       }
     }
   } else {
