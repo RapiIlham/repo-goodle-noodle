@@ -12,6 +12,7 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
+    console.log(req.url);
     broadcast(msg.toString())
   })
 });
