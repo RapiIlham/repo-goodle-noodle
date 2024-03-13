@@ -1,9 +1,42 @@
-var express = require('express')
-const server = express()
-.use((req, res) => res.sendFile('/source.html', { root: __dirname }))
-.listen(3000, () => console.log(`Listening on ${3000}`));
+const http = require('http');
+const url = require('url');
+const ws = require('ws');
+const server = http.createServer(async (req, res) => {
+  if(req.url.includes('getMem')){
+    var con = new WebSocket('wss://server.moddereducation.com');
+    con.onopen = function(){
+      con.send('getMem');
+    }
+    con.onmessage = function(msg){
+      var data = msg.data;
+      if(JSON.parse(data)){
+        var json = JSON.parse(data);
+        if(json.cpu){
+          res.writeHead(200, {
+          'Content-Type': 'application/json',
+          });
+          res.end(JSON.stringify(json));
+          con.close();
+        } else {
+          res.writeHead(400);
+          res.end('Error');
+        }
+      } else {
+        res.writeHead(400);
+        res.end('Error');
+      }
+    }
+  } else {
+    res.writeHead(400);
+    res.end('Not Found');
+  }
+});
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
 const { Server } = require('ws');
-const ws = require('ws')
 const wss = new Server({server});
 
 wss.on('connection',(client, req)=>{
