@@ -6,8 +6,8 @@ const { Server } = require('ws');
 const ws = require('ws')
 const wss = new Server({server});
 
-wss.on('connection',(client)=>{
-  console.log(client.upgradeReq.url);
+wss.on('connection',(client, req)=>{
+  console.log(req.url);
   client.on('close', () => {
     console.log('dc')
   })
