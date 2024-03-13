@@ -8,6 +8,7 @@ const wss = new Server({server});
 
 wss.on('connection',(client, req)=>{
   console.log('client connected on '+req.url);
+  client.id = req.url;
   client.on('close', () => {
     console.log('Client Disconnected');
   });
@@ -19,7 +20,7 @@ wss.on('connection',(client, req)=>{
 function broadcast(msg) {      
   for(const client of wss.clients){
     if(client.readyState === ws.OPEN){
-      console.log(client.url);
+      console.log(client.id);
       client.send(`${msg}`)
     }
   }
