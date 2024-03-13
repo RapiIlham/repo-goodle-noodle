@@ -1,18 +1,21 @@
-import WebSocket, { WebSocketServer } from 'ws';
+const express = require('express');
+const { Server } = require('ws');
 
-const wss = new WebSocketServer({ port: 8080 });
+const app = express();
+const server = app.listen(8080, () => {
+  console.log('Server listening on port 8080');
+});
 
-wss.on('connection', function connection(ws) {
-  const wssUrl = ws.upgradeReq.url;
-  console.log(`Client connected: ${wssUrl}`);
+const wss = new Server({ server });
 
-  ws.on('error', console.error);
+wss.on('connection', (ws) => {
+  console.log(ws.upgradeReq.url);
 
-  ws.on('message', function message(data, isBinary) {
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(data, { binary: isBinary });
-      }
-    });
+  ws.on('message', (data) => {
+    console.log(`Received message: ${data}`);
+  });
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
   });
 });
