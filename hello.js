@@ -7,6 +7,7 @@ const ws = require('ws')
 const wss = new Server({server});
 
 wss.on('connection',(client, req)=>{
+  console.log('client connected on '+req.url);
   client.on('close', () => {
     console.log('Client Disconnected');
   });
