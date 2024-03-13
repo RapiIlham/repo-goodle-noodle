@@ -18,7 +18,8 @@ const server = http.createServer(async (req, res) => {
           if(json.cpu){
             res.writeHead(200, {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'GET'
             });
             res.end(JSON.stringify(json));
             con.close();
