@@ -57,7 +57,7 @@ wss.on('connection',(client, req)=>{
 });
 
 function broadcast(msg, senderURL) {      
-  for(const client of wss.clients){z
+  for(const client of wss.clients){
     if(client.readyState === ws.OPEN && client.id == senderURL){
       client.send(`${msg}`);
     }
