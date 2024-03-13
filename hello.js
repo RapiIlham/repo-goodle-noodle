@@ -26,6 +26,7 @@ const server = http.createServer(async (req, res) => {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers': 'access-control-allow-origin'
             });
+            json.id = id;
             res.end(JSON.stringify(json));
             con.close();
             clearTimeout(t);
