@@ -6,34 +6,36 @@ const server = http.createServer(async (req, res) => {
   if(req.url.includes('getMem')){
     const params = url.parse(req.url, true).query;
     const id = params.id;
-    var con = new WebSocket('wss://server.moddereducation.com/'+id);
-    con.onopen = function(){
-      con.send('getMem');
-    }
-    con.onmessage = function(msg){
-      var data = msg.data;
-      if(JSON.parse(data)){
-        var json = JSON.parse(data);
-        if(json.cpu){
-          res.writeHead(200, {
-          'Content-Type': 'application/json',
-          });
-          res.end(JSON.stringify(json));
-          con.close();
+    if(id){
+      var con = new WebSocket('wss://server.moddereducation.com/'+id);
+      con.onopen = function(){
+        con.send('getMem');
+      }
+      con.onmessage = function(msg){
+        var data = msg.data;
+        if(typeof data == "object"){
+          var json = JSON.parse(data);
+          if(json.cpu){
+            res.writeHead(200, {
+            'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify(json));
+            con.close();
+          } else {
+            res.writeHead(400);
+            res.end('Error');
+            con.close();
+          }
         } else {
           res.writeHead(400);
           res.end('Error');
-          con.close();
+          con.close()
         }
-      } else {
-        res.writeHead(400);
-        res.end('Error');
-        con.close()
       }
+    } else {
+      res.writeHead(400);
+      res.end('Not Found');
     }
-  } else {
-    res.writeHead(400);
-    res.end('Not Found');
   }
 });
 const PORT = 3000;
