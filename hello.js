@@ -1,21 +1,25 @@
-const express = require('express');
+var express = require('express')
+const server = express()
+.use((req, res) => res.sendFile('/source.html', { root: __dirname }))
+.listen(3000, () => console.log(`Listening on ${3000}`));
 const { Server } = require('ws');
+const ws = require('ws')
+const wss = new Server({server});
 
-const app = express();
-const server = app.listen(8080, () => {
-  console.log('Server listening on port 8080');
+wss.on('connection',(client)=>{
+  console.log('Client connected !')
+  client.on('close', () => {
+    console.log('dc')
+  })
+  client.on('message',(msg)=>{
+    broadcast(msg.toString())
+  })
 });
 
-const wss = new Server({ server });
-
-wss.on('connection', (ws) => {
-  console.log(ws.upgradeReq.url);
-
-  ws.on('message', (data) => {
-    console.log(`Received message: ${data}`);
-  });
-
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
-});
+function broadcast(msg) {      
+  for(const client of wss.clients){
+    if(client.readyState === ws.OPEN){
+      client.send(`${msg}`)
+    }
+  }
+}
