@@ -4,7 +4,7 @@ const ws = require('ws');
 const server = http.createServer(async (req, res) => {
   if(req.url.includes('getMem')){
     const params = url.parse(req.url, true).query;
-    const keyword = params.id;
+    const id = params.id;
     var con = new WebSocket('wss://server.moddereducation.com/'+id);
     con.onopen = function(){
       con.send('getMem');
