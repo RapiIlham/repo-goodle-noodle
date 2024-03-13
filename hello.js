@@ -18,6 +18,7 @@ const server = http.createServer(async (req, res) => {
           if(json.cpu){
             res.writeHead(200, {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': 'https://71852867-7c3e-43d1-b105-c921b1a36268-00-dmdkgm8vaqdy.sisko.replit.dev/Home/'
             });
             res.end(JSON.stringify(json));
             con.close();
