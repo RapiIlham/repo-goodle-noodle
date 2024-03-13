@@ -12,7 +12,6 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
-    console.log(req.url);
     broadcast(msg.toString())
   })
 });
@@ -20,6 +19,7 @@ wss.on('connection',(client, req)=>{
 function broadcast(msg) {      
   for(const client of wss.clients){
     if(client.readyState === ws.OPEN){
+      console.log(client.url);
       client.send(`${msg}`)
     }
   }
