@@ -13,7 +13,7 @@ const server = http.createServer(async (req, res) => {
       }
       con.onmessage = function(msg){
         var data = msg.data;
-        if(typeof data == "object"){
+        if(data.includes('{"cpu"')){
           var json = JSON.parse(data);
           if(json.cpu){
             res.writeHead(200, {
