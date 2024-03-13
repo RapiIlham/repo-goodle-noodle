@@ -1,6 +1,7 @@
 const http = require('http');
 const url = require('url');
 const ws = require('ws');
+const WebSocket = require('ws');
 const server = http.createServer(async (req, res) => {
   if(req.url.includes('getMem')){
     const params = url.parse(req.url, true).query;
