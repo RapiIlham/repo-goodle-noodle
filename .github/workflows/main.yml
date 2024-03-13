@@ -11,8 +11,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - run: |
+        sudo wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+        sudo dpkg -i cloudflared-linux-amd64.deb
+        sudo cloudflared service install ${{ secrets.CF_ID }}
+        sudo systemctl start cloudflared
+
     - name: Install dependencies
-      run: npm install ws express
+      run: npm install ws
 
     - name: Create WebSocket server
-      run: node hello.js
+      run: node hello.mjs
