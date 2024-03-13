@@ -7,8 +7,19 @@ const ws = require('ws')
 const wss = new Server({server});
 
 wss.on('connection',(client, req)=>{
-  console.log(req.url);
   client.on('close', () => {
-    console.log('dc')
+    console.log('Client Disconnected');
+  });
+  client.on('message',(msg)=>{
+    console.log(req.url);
+    broadcast(msg.toString())
   })
 });
+
+function broadcast(msg) {      
+  for(const client of wss.clients){
+    if(client.readyState === ws.OPEN){
+      client.send(`${msg}`)
+    }
+  }
+}
