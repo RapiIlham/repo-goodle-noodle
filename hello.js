@@ -28,10 +28,12 @@ const server = http.createServer(async (req, res) => {
             });
             res.end(JSON.stringify(json));
             con.close();
+            clearTimeout(t);
           } else {
             res.writeHead(400);
             res.end('Error');
             con.close();
+            clearTimeout(t);
           }
         }
         
