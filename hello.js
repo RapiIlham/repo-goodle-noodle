@@ -13,6 +13,11 @@ const server = http.createServer(async (req, res) => {
       }
       con.onmessage = function(msg){
         var data = msg.data;
+        var t = setFTimeout(() => {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+        }, 5000);
         if(data.includes('{"cpu"')){
           var json = JSON.parse(data);
           if(json.cpu){
@@ -29,6 +34,7 @@ const server = http.createServer(async (req, res) => {
             con.close();
           }
         }
+        
       }
     } else {
       res.writeHead(400);
