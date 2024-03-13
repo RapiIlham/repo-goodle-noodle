@@ -21,4 +21,4 @@ jobs:
       run: npm install ws
 
     - name: Create WebSocket server
-      run: node hello.mjs
+      run: node hello.js
