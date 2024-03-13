@@ -19,7 +19,7 @@ const server = http.createServer(async (req, res) => {
             res.writeHead(200, {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'GET'
+            'Access-Control-Allow-Headers': 'access-control-allow-origin'
             });
             res.end(JSON.stringify(json));
             con.close();
