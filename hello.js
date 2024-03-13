@@ -58,8 +58,10 @@ wss.on('connection',(client, req)=>{
 
 function broadcast(msg, senderURL) {      
   for(const client of wss.clients){
-    if(client.readyState === ws.OPEN && client.id == senderURL){
-      client.send(`${msg}`)
+    if(client.readyState === ws.OPEN){
+      if(client.id.includes(senderURL) || client.id == senderURL.replace('-host', '')){
+        client.send(`${msg}`);
+      }
     }
   }
 }
