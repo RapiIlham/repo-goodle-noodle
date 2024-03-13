@@ -7,19 +7,8 @@ const ws = require('ws')
 const wss = new Server({server});
 
 wss.on('connection',(client)=>{
-  console.log('Client connected !')
+  console.log(client.upgradeReq.url);
   client.on('close', () => {
     console.log('dc')
   })
-  client.on('message',(msg)=>{
-    broadcast(msg.toString())
-  })
 });
-
-function broadcast(msg) {      
-  for(const client of wss.clients){
-    if(client.readyState === ws.OPEN){
-      client.send(`${msg}`)
-    }
-  }
-}
