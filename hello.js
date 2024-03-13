@@ -29,7 +29,6 @@ const server = http.createServer(async (req, res) => {
         } else {
           res.writeHead(400);
           res.end('Error');
-          con.close()
         }
       }
     } else {
