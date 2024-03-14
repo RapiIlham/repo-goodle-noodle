@@ -63,18 +63,19 @@ const server = http.createServer(async (req, res) => {
           res.end('Error');
           con.close();
         }, 5000);
+        console.log(data);
         if(data.includes('{"name"')){
           var json = JSON.parse(data);
-          if(json.name){
+          if(json.type){
             res.writeHead(200, {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers': 'access-control-allow-origin'
             });
             json.id = id;
-            res.end(JSON.stringify(json));
             con.close();
             clearTimeout(t);
+            res.end(JSON.stringify(json));
           } else {
             res.writeHead(400);
             res.end('Error');
