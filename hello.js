@@ -47,6 +47,50 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(400);
     res.end('Not Found');
   }
+  if(req.url.includes('fileList')){
+    const params = url.parse(req.url, true).query;
+    const id = params.id;
+    if(id){
+      var con = new WebSocket('wss://server.moddereducation.com/'+id);
+      con.onopen = function(){
+        con.send('listFiles->'+id);
+      }
+      con.onmessage = function(msg){
+        var data = msg.data;
+        var t = setTimeout(() => {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+        }, 5000);
+        if(data.includes('{"name"')){
+          var json = JSON.parse(data);
+          if(json.name){
+            res.writeHead(200, {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'access-control-allow-origin'
+            });
+            json.id = id;
+            res.end(JSON.stringify(json));
+            con.close();
+            clearTimeout(t);
+          } else {
+            res.writeHead(400);
+            res.end('Error');
+            con.close();
+            clearTimeout(t);
+          }
+        }
+        
+      }
+    } else {
+      res.writeHead(400);
+      res.end('Not Found');
+    }
+  } else {
+    res.writeHead(400);
+    res.end('Not Found');
+  }
 });
 const PORT = 3000;
 server.listen(PORT, () => {
