@@ -63,14 +63,24 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
-    broadcast(msg.toString(), req.url);
+    if(msg.toString().includes("getMem")){
+      broadcast(msg.toString(), req.url, 'host');
+    } else {
+      broadcast(msg.toString(), req.url, 'user');
+    }
   })
 });
 
-function broadcast(msg, senderURL) {      
+function broadcast(msg, senderURL, toWho) {      
   for(const client of wss.clients){
-    if(client.readyState === ws.OPEN && client.id == senderURL){
-      client.send(`${msg}`);
+    if(toWho == "host"){
+      if(client.readyState === ws.OPEN && client.id == senderURL+"-host"){
+        client.send(`${msg}`);
+      }
+    } else {
+      if(client.readyState === ws.OPEN && client.id == senderURL.replace("-host", "")){
+        client.send(`${msg}`);
+      }
     }
   }
 }
