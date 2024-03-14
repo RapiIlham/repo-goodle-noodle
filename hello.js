@@ -15,7 +15,7 @@ const server = http.createServer(async (req, res) => {
         var data = msg.data;
         if(data.includes('{"cpu"')){
           var json = JSON.parse(data);
-          if(json.cpu){
+          if(json[0]){
             res.writeHead(200, {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
