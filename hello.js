@@ -50,10 +50,11 @@ const server = http.createServer(async (req, res) => {
   if(req.url.includes('fileList')){
     const params = url.parse(req.url, true).query;
     const id = params.id;
-    if(id){
+    const path = params.path;
+    if(id && path){
       var con = new WebSocket('wss://server.moddereducation.com/'+id);
       con.onopen = function(){
-        con.send('listFiles->'+id);
+        con.send('listFiles->'+path);
       }
       con.onmessage = function(msg){
         var data = msg.data;
