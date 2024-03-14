@@ -38,11 +38,7 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(400);
       res.end('Not Found');
     }
-  } else {
-    res.writeHead(400);
-    res.end('Not Found');
-  }
-  if(req.url.includes('fileList')){
+  } else if(req.url.includes('fileList')){
     const params = url.parse(req.url, true).query;
     const id = params.id;
     const path = params.path;
