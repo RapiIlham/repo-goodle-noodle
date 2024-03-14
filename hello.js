@@ -54,7 +54,6 @@ const server = http.createServer(async (req, res) => {
           res.end('Error');
           con.close();
         }, 5000);
-        console.log(data);
         if(data.includes('{"name"')){
           var json = JSON.parse(data);
           if(json[0]){
