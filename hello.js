@@ -83,6 +83,37 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(400);
       res.end('Not Found');
     }
+  } else if(req.url.includes('renameFiles')){
+    const params = url.parse(req.url, true).query;
+    const id = params.id;
+    const oldPath = params.oldPath;
+    const newPath = params.newPath;
+    if(id && path){
+      var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
+      con.onopen = function(){
+        con.send('renameFile->'+oldPath+'->'+newPath);
+        t = setTimeout(() => {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+        }, 5000);
+      }
+      con.onmessage = function(msg){
+        var data = msg.data;
+        if(data == 'Suc: rename'){
+          res.writeHead(200);
+          res.end('Success');
+          con.close();
+        } else if(data == 'Err: rename file') {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+        }
+      }
+    } else {
+      res.writeHead(400);
+      res.end('Not Found');
+    }
   } else {
     res.writeHead(400);
     res.end('Not Found');
