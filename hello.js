@@ -7,17 +7,17 @@ const server = http.createServer(async (req, res) => {
     const params = url.parse(req.url, true).query;
     const id = params.id;
     if(id){
-      var con = new WebSocket('wss://server.moddereducation.com/'+id);
+      var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
       con.onopen = function(){
         con.send('getMem');
-      }
-      con.onmessage = function(msg){
-        var data = msg.data;
-        var t = setTimeout(() => {
+        t = setTimeout(() => {
           res.writeHead(400);
           res.end('Error');
           con.close();
         }, 5000);
+      }
+      con.onmessage = function(msg){
+        var data = msg.data;
         if(data.includes('{"cpu"')){
           var json = JSON.parse(data);
           if(json.cpu){
@@ -48,17 +48,17 @@ const server = http.createServer(async (req, res) => {
     const id = params.id;
     const path = params.path;
     if(id && path){
-      var con = new WebSocket('wss://server.moddereducation.com/'+id);
+      var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
       con.onopen = function(){
         con.send('listFiles->'+path);
-      }
-      con.onmessage = function(msg){
-        var data = msg.data;
-        var t = setTimeout(() => {
+        t = setTimeout(() => {
           res.writeHead(400);
           res.end('Error');
           con.close();
         }, 5000);
+      }
+      con.onmessage = function(msg){
+        var data = msg.data;
         if(data.includes('{"name"')){
           var json = JSON.parse(data);
           if(json[0]){
