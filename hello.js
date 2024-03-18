@@ -83,12 +83,12 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(400);
       res.end('Not Found');
     }
-  } else if(req.url.includes('renameFiles')){
+  } else if(req.url.includes('renameFile')){
     const params = url.parse(req.url, true).query;
     const id = params.id;
     const oldPath = params.oldpath;
     const newPath = params.newpath;
-    if(id && path){
+    if(id && oldpath && newpath){
       var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
       con.onopen = function(){
         con.send('renameFile->'+oldPath+'->'+newPath);
