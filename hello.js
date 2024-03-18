@@ -140,7 +140,9 @@ wss.on('connection',(client, req)=>{
       broadcast(msg.toString(), req.url, 'host');
     } else if(msg.toString().includes("listFiles->")){
       broadcast(msg.toString(), req.url, 'host');
-    } else {
+    } else if(msg.toString().includes("renameFile->")){
+      broadcast(msg.toString(), req.url, 'host');
+    }else {
       broadcast(msg.toString(), req.url, 'user');
     }
   })
