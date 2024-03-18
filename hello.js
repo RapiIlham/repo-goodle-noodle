@@ -104,10 +104,12 @@ const server = http.createServer(async (req, res) => {
           res.writeHead(200);
           res.end('Success');
           con.close();
+          clearTimeout(t);
         } else if(data == 'Err: rename file') {
           res.writeHead(400);
           res.end('Error');
           con.close();
+          clearTimeout(t);
         }
       }
     } else {
