@@ -101,7 +101,11 @@ const server = http.createServer(async (req, res) => {
       con.onmessage = function(msg){
         var data = msg.data;
         if(data == 'Suc: rename'){
-          res.writeHead(200);
+          res.writeHead(200, {
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'access-control-allow-origin'
+          });
           res.end('Success');
           con.close();
           clearTimeout(t);
