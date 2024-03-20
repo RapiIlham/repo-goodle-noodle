@@ -129,7 +129,7 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(400);
       res.end('Not Found');
     }
-  } else if(req.url.includes('deleteFile->')){
+  } else if(req.url.includes('deleteFile')){
     const params = url.parse(req.url, true).query;
     const id = params.id;
     const path = params.path;
