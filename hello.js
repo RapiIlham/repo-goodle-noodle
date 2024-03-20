@@ -161,6 +161,7 @@ const server = http.createServer(async (req, res) => {
           clearTimeout(t);
         }
       }
+    }
     } else if(req.url.includes('deleteFolder')){
     const params = url.parse(req.url, true).query;
     const id = params.id;
@@ -193,7 +194,7 @@ const server = http.createServer(async (req, res) => {
           clearTimeout(t);
         }
       }
-    }  else {
+    } else {
       res.writeHead(400);
       res.end('Not Found');
     }
