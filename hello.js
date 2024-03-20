@@ -161,7 +161,39 @@ const server = http.createServer(async (req, res) => {
           clearTimeout(t);
         }
       }
-    } else {
+    } else if(req.url.includes('deleteFolder')){
+    const params = url.parse(req.url, true).query;
+    const id = params.id;
+    const path = params.path;
+    if(id && path){
+      var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
+      con.onopen = function(){
+        con.send('deleteFolder->'+path);
+        t = setTimeout(() => {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+        }, 5000);
+      }
+      con.onmessage = function(msg){
+        var data = msg.data;
+        if(data == 'Suc: delete folder'){
+          res.writeHead(200, {
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'access-control-allow-origin'
+          });
+          res.end('Success');
+          con.close();
+          clearTimeout(t);
+        } else if(data == 'Err: delete folder') {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+          clearTimeout(t);
+        }
+      }
+    }  else {
       res.writeHead(400);
       res.end('Not Found');
     }
