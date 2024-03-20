@@ -76,6 +76,15 @@ const server = http.createServer(async (req, res) => {
             con.close();
             clearTimeout(t);
           }
+        } else if(data == "[]"){
+          res.writeHead(200, {
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'access-control-allow-origin'
+          });
+          con.close();
+          clearTimeout(t);
+          res.end(JSON.stringify([]));
         }
         
       }
