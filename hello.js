@@ -129,6 +129,42 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(400);
       res.end('Not Found');
     }
+  } else if(req.url.includes('deleteFile->')){
+    const params = url.parse(req.url, true).query;
+    const id = params.id;
+    const path = params.path;
+    if(id && path){
+      var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
+      con.onopen = function(){
+        con.send('deleteFile->'+path);
+        t = setTimeout(() => {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+        }, 5000);
+      }
+      con.onmessage = function(msg){
+        var data = msg.data;
+        if(data == 'Suc: delete'){
+          res.writeHead(200, {
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'access-control-allow-origin'
+          });
+          res.end('Success');
+          con.close();
+          clearTimeout(t);
+        } else if(data == 'Err: delete') {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+          clearTimeout(t);
+        }
+      }
+    } else {
+      res.writeHead(400);
+      res.end('Not Found');
+    }
   } else {
     res.writeHead(400);
     res.end('Not Found');
@@ -155,7 +191,9 @@ wss.on('connection',(client, req)=>{
       broadcast(msg.toString(), req.url, 'host');
     } else if(msg.toString().includes("renameFile->")){
       broadcast(msg.toString(), req.url, 'host');
-    }else {
+    } else if(msg.toString().includes("deleteFile->")){
+      broadcast(msg.toString(), req.url, 'host');
+    }  else {
       broadcast(msg.toString(), req.url, 'user');
     }
   })
