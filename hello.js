@@ -235,6 +235,43 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(400);
       res.end('Not Found');
     }
+  } else if(req.url.includes('createFolder')){
+    const params = url.parse(req.url, true).query;
+    const id = params.id;
+    const path = params.path;
+    const name = params.name;
+    if(id && path && name){
+      var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
+      con.onopen = function(){
+        con.send('createFolder->'+path+name);
+        t = setTimeout(() => {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+        }, 5000);
+      }
+      con.onmessage = function(msg){
+        var data = msg.data;
+        if(data == 'Suc: createFolder'){
+          res.writeHead(200, {
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'access-control-allow-origin'
+          });
+          res.end('Success');
+          con.close();
+          clearTimeout(t);
+        } else if(data == 'Err: createFolder') {
+          res.writeHead(400);
+          res.end('Error');
+          con.close();
+          clearTimeout(t);
+        }
+      }
+    } else {
+      res.writeHead(400);
+      res.end('Not Found');
+    }
   } else {
     res.writeHead(400);
     res.end('Not Found');
@@ -266,6 +303,8 @@ wss.on('connection',(client, req)=>{
     } else if(msg.toString().includes("deleteFolder->")){
       broadcast(msg.toString(), req.url, 'host');
     } else if(msg.toString().includes("createFile->")){
+      broadcast(msg.toString(), req.url, 'host');
+    } else if(msg.toString().includes("createFolder->")){
       broadcast(msg.toString(), req.url, 'host');
     } else {
       broadcast(msg.toString(), req.url, 'user');
