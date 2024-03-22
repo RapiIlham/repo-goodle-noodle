@@ -206,7 +206,7 @@ const server = http.createServer(async (req, res) => {
     if(id && path && name){
       var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
       con.onopen = function(){
-        con.send('createFile->'+path);
+        con.send('createFile->'+path+name);
         t = setTimeout(() => {
           res.writeHead(400);
           res.end('Error');
