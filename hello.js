@@ -349,7 +349,7 @@ const server = http.createServer(async (req, res) => {
               con.close();
               clearTimeout(t);
             } else if(data == "whatCont->"+path+name){
-              con.send('content('+path+name+')->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380'));
+              con.send('content('+path+name+'->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380'));
             }
           };
         } else {
