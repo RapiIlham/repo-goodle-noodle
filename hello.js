@@ -303,7 +303,7 @@ const server = http.createServer(async (req, res) => {
             res.end('Error');
             con.close();
             clearTimeout(t);
-          } else if(data.substr(0, 6) == "chunk:"){
+          } else if(data.substr(0, 6) == "chunk"){
             content += data.substr(6);
           }
       }
