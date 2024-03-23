@@ -317,7 +317,44 @@ const server = http.createServer(async (req, res) => {
       // });
       var form = new formidable.IncomingForm();
       form.parse(req, function(err, fields, files) {
-        console.log(fields.fcont.toString(), files);
+        var id = fields.id.toString();
+        var path = fields.path.toString();
+        var name = fields.name.toString();
+        var fileContent = fields.fcont.toString();
+        if(id && path && name && fileContent){
+          var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
+          con.onopen = function(){
+            con.send('saveFiles->'+path+name);
+            t = setTimeout(() => {
+              res.writeHead(400);
+              res.end('Error');
+              con.close();
+            }, 10000);
+          }
+          con.onmessage = function(msg){
+            var data = msg.data;
+            if(data == 'Suc: saveFile->'+path+name){
+              res.writeHead(200, {
+                'Content-Type': 'text/plain',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'access-control-allow-origin'
+              });
+              res.end('Success');
+              con.close();
+              clearTimeout(t);
+            } else if(data == 'Err: saveFile->'+path+name) {
+              res.writeHead(400);
+              res.end('Error');
+              con.close();
+              clearTimeout(t);
+            } else if(data == "whatCont->"+path+name){
+              ws.send('content('+path+name+')->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380'));
+            }
+          };
+        } else {
+          res.writeHead(404);
+          res.end('Not Found');
+        }
       });
       // req.on('end', () => {
         // const content = Buffer.concat(chunk).toString();
@@ -328,40 +365,7 @@ const server = http.createServer(async (req, res) => {
         // var name = params.get('name');
         // var fileContent = params.get('fcont');
         // console.log(content);
-        // if(id && path && name && fileContent){
-        //   var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
-        //   con.onopen = function(){
-        //     con.send('saveFiles->'+path+name);
-        //     t = setTimeout(() => {
-        //       res.writeHead(400);
-        //       res.end('Error');
-        //       con.close();
-        //     }, 10000);
-        //   }
-        //   con.onmessage = function(msg){
-        //     var data = msg.data;
-        //     if(data == 'Suc: saveFile->'+path+name){
-        //       res.writeHead(200, {
-        //         'Content-Type': 'text/plain',
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Access-Control-Allow-Headers': 'access-control-allow-origin'
-        //       });
-        //       res.end('Success');
-        //       con.close();
-        //       clearTimeout(t);
-        //     } else if(data == 'Err: saveFile->'+path+name) {
-        //       res.writeHead(400);
-        //       res.end('Error');
-        //       con.close();
-        //       clearTimeout(t);
-        //     } else if(data == "whatCont->"+path+name){
-        //       ws.send('content('+path+name+')->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380'));
-        //     }
-        //   };
-        // } else {
-        //   res.writeHead(404);
-        //   res.end('Not Found');
-        // }
+        
       // });
     }
   } else {
