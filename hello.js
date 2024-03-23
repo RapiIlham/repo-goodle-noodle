@@ -296,9 +296,10 @@ const server = http.createServer(async (req, res) => {
               'Access-Control-Allow-Origin': '*',
               'Access-Control-Allow-Headers': 'access-control-allow-origin'
             });
+            res.write(content, 'binary');
+            res.end();
             con.close();
             clearTimeout(t);
-            res.end(content);
           } else if(data == 'Err: getFile->'+path+name) {
             res.writeHead(400);
             res.end('Error');
