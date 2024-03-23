@@ -333,6 +333,7 @@ const server = http.createServer(async (req, res) => {
           }
           con.onmessage = function(msg){
             var data = msg.data;
+            console.log(data);
             if(data == 'Suc: saveFile->'+path+name){
               res.writeHead(200, {
                 'Content-Type': 'text/plain',
