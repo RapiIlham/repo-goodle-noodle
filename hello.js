@@ -289,7 +289,7 @@ const server = http.createServer(async (req, res) => {
       }
       con.onmessage = function(msg){
         var data = msg.data, content = "";
-        console.log(data.substr(0, 6);
+        console.log(data.substr(0, 6));
           if(data == 'Suc: getFile->'+path+name){
             res.writeHead(200, {
               'Content-Type': 'text/plain',
