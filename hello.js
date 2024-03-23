@@ -347,8 +347,8 @@ const server = http.createServer(async (req, res) => {
               res.end('Error');
               con.close();
               clearTimeout(t);
-            } else if(data == "whatCont?"){
-              ws.send('content:'+fileContent.replaceAll('%26', '&'));
+            } else if(data == "whatCont->"+path+name){
+              ws.send('content('+path+name+')->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380');
             }
           };
         } else {
@@ -377,7 +377,7 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
-    if(msg.toString().substr(0, 8) != "content:"){
+    if(!msg.include("content(")){
       if(!msg.toString().includes("chunk:")){
         if(msg.toString().includes("getMem")){
           broadcast(msg.toString(), req.url, 'host');
