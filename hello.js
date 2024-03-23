@@ -306,6 +306,7 @@ const server = http.createServer(async (req, res) => {
             clearTimeout(t);
           }
         } else {
+          console.log(data.substr(6));
           content = data.substr(6);
         }
       }
