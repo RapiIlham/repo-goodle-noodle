@@ -321,6 +321,7 @@ const server = http.createServer(async (req, res) => {
         var path = params.get('path');
         var name = params.get('name');
         var fileContent = params.get('fcont');
+        console.log(id, path, name, fileContent);
         if(id && path && name && fileContent){
           var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
           con.onopen = function(){
