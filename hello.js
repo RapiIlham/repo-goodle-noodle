@@ -307,7 +307,8 @@ const server = http.createServer(async (req, res) => {
             content += data.substr(6);
           }
       };
-    } else if(req.url.includes('saveFiles')){
+    }
+  } else if(req.url.includes('saveFiles')){
     if(req.method == "POST"){
       req.on('data', (chunks) => {
         chunk.push(chunks);
