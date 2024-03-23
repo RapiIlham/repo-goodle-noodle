@@ -285,7 +285,7 @@ const server = http.createServer(async (req, res) => {
           res.writeHead(400);
           res.end('Error');
           con.close();
-        }, 5000);
+        }, 10000);
       }
       con.onmessage = function(msg){
         var data = msg.data, content = "";
