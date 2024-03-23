@@ -278,7 +278,7 @@ const server = http.createServer(async (req, res) => {
     const path = params.path;
     const name = params.name;
     if(id && path && name){
-      var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
+      var con = new WebSocket('wss://server.moddereducation.com/'+id), t. content = "";
       con.onopen = function(){
         con.send('getFiles->'+path+name);
         t = setTimeout(() => {
@@ -287,8 +287,8 @@ const server = http.createServer(async (req, res) => {
           con.close();
         }, 10000);
       }
-      con.onmessage = function(msg){
-        var data = msg.data, content = "";
+      con.onmessage = (async function(msg){
+        var data = msg.data;
         console.log(data.substr(0, 6));
           if(data == 'Suc: getFile->'+path+name){
             res.writeHead(200, {
@@ -304,10 +304,10 @@ const server = http.createServer(async (req, res) => {
             res.end('Error');
             con.close();
             clearTimeout(t);
-          } else if(data.substr(0, 6) == "chunk"){
+          } else if(data.substr(0, 6) == "chunk:"){
             content += data.substr(6);
           }
-      }
+      });
     } else {
       res.writeHead(400);
       res.end('Not Found');
