@@ -329,22 +329,26 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
-    if(msg.toString().includes("getMem")){
-      broadcast(msg.toString(), req.url, 'host');
-    } else if(msg.toString().includes("listFiles->")){
-      broadcast(msg.toString(), req.url, 'host');
-    } else if(msg.toString().includes("renameFile->")){
-      broadcast(msg.toString(), req.url, 'host');
-    } else if(msg.toString().includes("deleteFile->")){
-      broadcast(msg.toString(), req.url, 'host');
-    } else if(msg.toString().includes("deleteFolder->")){
-      broadcast(msg.toString(), req.url, 'host');
-    } else if(msg.toString().includes("createFile->")){
-      broadcast(msg.toString(), req.url, 'host');
-    } else if(msg.toString().includes("createFolder->")){
-      broadcast(msg.toString(), req.url, 'host');
-    } else if(msg.toString().includes("getFiles->")){
-      broadcast(msg.toString(), req.url, 'host');
+    if(!msg.toString().includes("chunk:")){
+      if(msg.toString().includes("getMem")){
+        broadcast(msg.toString(), req.url, 'host');
+      } else if(msg.toString().includes("listFiles->")){
+        broadcast(msg.toString(), req.url, 'host');
+      } else if(msg.toString().includes("renameFile->")){
+        broadcast(msg.toString(), req.url, 'host');
+      } else if(msg.toString().includes("deleteFile->")){
+        broadcast(msg.toString(), req.url, 'host');
+      } else if(msg.toString().includes("deleteFolder->")){
+        broadcast(msg.toString(), req.url, 'host');
+      } else if(msg.toString().includes("createFile->")){
+        broadcast(msg.toString(), req.url, 'host');
+      } else if(msg.toString().includes("createFolder->")){
+        broadcast(msg.toString(), req.url, 'host');
+      } else if(msg.toString().includes("getFiles->")){
+        broadcast(msg.toString(), req.url, 'host');
+      } else {
+        broadcast(msg.toString(), req.url, 'user');
+      }
     } else {
       broadcast(msg.toString(), req.url, 'user');
     }
