@@ -315,12 +315,13 @@ const server = http.createServer(async (req, res) => {
       // req.on('data', (chunks) => {
       //   chunk.push(chunks);
       // });
-      req.on('end', () => {
+      var form = new formidable.IncomingForm();
+      form.parse(req, function(err, fields, files) {
+        console.log(fields, files);
+      });
+      // req.on('end', () => {
         // const content = Buffer.concat(chunk).toString();
-        var form = new formidable.IncomingForm();
-        form.parse(req, function(err, fields, files) {
-          console.log(fields, files);
-        });
+        
         // var params = new URLSearchParams(content);
         // var id = params.get('id');
         // var path = params.get('path');
@@ -361,7 +362,7 @@ const server = http.createServer(async (req, res) => {
         //   res.writeHead(404);
         //   res.end('Not Found');
         // }
-      });
+      // });
     }
   } else {
     res.writeHead(404);
