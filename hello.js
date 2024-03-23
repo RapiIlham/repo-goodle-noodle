@@ -310,6 +310,7 @@ const server = http.createServer(async (req, res) => {
     }
   } else if(req.url.includes('saveFiles')){
     if(req.method == "POST"){
+      var chunk = [];
       req.on('data', (chunks) => {
         chunk.push(chunks);
       });
@@ -353,7 +354,7 @@ const server = http.createServer(async (req, res) => {
       });
     }
   } else {
-    res.writeHead(400);
+    res.writeHead(404);
     res.end('Not Found');
   }
 });
