@@ -287,7 +287,7 @@ const server = http.createServer(async (req, res) => {
           con.close();
         }, 10000);
       }
-      con.onmessage = (async function(msg){
+      con.onmessage = function(msg){
         var data = msg.data;
         console.log(data.substr(0, 6));
           if(data == 'Suc: getFile->'+path+name){
@@ -307,7 +307,7 @@ const server = http.createServer(async (req, res) => {
           } else if(data.substr(0, 6) == "chunk:"){
             content += data.substr(6);
           }
-      });
+      };
     } else {
       res.writeHead(400);
       res.end('Not Found');
