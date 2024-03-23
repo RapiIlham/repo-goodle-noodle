@@ -320,7 +320,7 @@ const server = http.createServer(async (req, res) => {
         var id = params.get('id');
         var path = params.get('path');
         var name = params.get('name');
-        var fileContent = params.get('fcont').replaceAll('%26', '&');
+        var fileContent = params.get('fcont');
         if(id && path && name && fileContent){
           var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
           con.onopen = function(){
@@ -348,7 +348,7 @@ const server = http.createServer(async (req, res) => {
               con.close();
               clearTimeout(t);
             } else if(data == "whatCont?"){
-              ws.send('content:'+cont);
+              ws.send('content:'+fileContent.replaceAll('%26', '&'));
             }
           };
         } else {
