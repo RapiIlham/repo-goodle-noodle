@@ -377,6 +377,7 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
+    console.log(msg.toString());
     if(!msg.includes("content(")){
       if(!msg.toString().includes("chunk:")){
         if(msg.toString().includes("getMem")){
