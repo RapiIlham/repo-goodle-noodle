@@ -352,7 +352,7 @@ const server = http.createServer(async (req, res) => {
             }
           };
         } else {
-          res.writeHead(400);
+          res.writeHead(404);
           res.end('Not Found');
         }
       });
