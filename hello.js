@@ -289,6 +289,7 @@ const server = http.createServer(async (req, res) => {
       }
       con.onmessage = function(msg){
         var data = msg.data, content = "";
+        console.log(data);
         if(!data.includes('chunk:') && content != ""){
           if(data == 'Suc: getFile->'+path+name){
             res.writeHead(200, {
