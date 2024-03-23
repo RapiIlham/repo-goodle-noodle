@@ -288,21 +288,25 @@ const server = http.createServer(async (req, res) => {
         }, 5000);
       }
       con.onmessage = function(msg){
-        var data = msg.data;
-        if(data == 'Suc: getFile->'+path+name){
-          res.writeHead(200, {
-            'Content-Type': 'text/plain',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'access-control-allow-origin'
-          });
-          res.end('Success');
-          con.close();
-          clearTimeout(t);
-        } else if(data == 'Err: getFile->'+path+name) {
-          res.writeHead(400);
-          res.end('Error');
-          con.close();
-          clearTimeout(t);
+        var data = msg.data, content;
+        if(!data.includes('chunk:')){
+          if(data == 'Suc: getFile->'+path+name){
+            res.writeHead(200, {
+              'Content-Type': 'text/plain',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Headers': 'access-control-allow-origin'
+            });
+            con.close();
+            clearTimeout(t);
+            res.end(content);
+          } else if(data == 'Err: getFile->'+path+name) {
+            res.writeHead(400);
+            res.end('Error');
+            con.close();
+            clearTimeout(t);
+          }
+        } else {
+          content = data.substr(6);
         }
       }
     } else {
