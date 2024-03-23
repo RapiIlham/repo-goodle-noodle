@@ -1,6 +1,7 @@
 const http = require('http');
 const url = require('url');
 const ws = require('ws');
+const formidable = require('formidable');
 const WebSocket = require('ws');
 const server = http.createServer(async (req, res) => {
   if(req.url.includes('getMem')){
@@ -311,11 +312,15 @@ const server = http.createServer(async (req, res) => {
   } else if(req.url.includes('saveFiles')){
     if(req.method == "POST"){
       var chunk = [];
-      req.on('data', (chunks) => {
-        chunk.push(chunks);
-      });
+      // req.on('data', (chunks) => {
+      //   chunk.push(chunks);
+      // });
       req.on('end', () => {
-        const content = Buffer.concat(chunk).toString();
+        // const content = Buffer.concat(chunk).toString();
+        var form = new formidable.IncomingForm();
+        form.parse(req, function(err, fields, files) {
+          console.log(fields, files);
+        });
         var params = new URLSearchParams(content);
         var id = params.get('id');
         var path = params.get('path');
