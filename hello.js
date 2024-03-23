@@ -289,15 +289,13 @@ const server = http.createServer(async (req, res) => {
       }
       con.onmessage = function(msg){
         var data = msg.data, content = "";
-        if(data.substr(0, 6) != "chunk:"){
           if(data == 'Suc: getFile->'+path+name){
             res.writeHead(200, {
               'Content-Type': 'text/plain',
               'Access-Control-Allow-Origin': '*',
               'Access-Control-Allow-Headers': 'access-control-allow-origin'
             });
-            res.write(content, 'binary');
-            res.end();
+            res.end(content);
             con.close();
             clearTimeout(t);
           } else if(data == 'Err: getFile->'+path+name) {
@@ -305,10 +303,9 @@ const server = http.createServer(async (req, res) => {
             res.end('Error');
             con.close();
             clearTimeout(t);
+          } else if(data.substr(0, 6) == "chunk:"){
+            content += data.substr(6);
           }
-        } else {
-          content += data.substr(6);
-        }
       }
     } else {
       res.writeHead(400);
