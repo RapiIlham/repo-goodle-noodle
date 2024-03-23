@@ -278,7 +278,7 @@ const server = http.createServer(async (req, res) => {
     const path = params.path;
     const name = params.name;
     if(id && path && name){
-      var con = new WebSocket('wss://server.moddereducation.com/'+id), t. content = "";
+      var con = new WebSocket('wss://server.moddereducation.com/'+id), t, content = "";
       con.onopen = function(){
         con.send('getFiles->'+path+name);
         t = setTimeout(() => {
