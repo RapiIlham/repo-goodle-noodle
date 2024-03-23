@@ -316,41 +316,45 @@ const server = http.createServer(async (req, res) => {
       });
       req.on('end', () => {
         const content = Buffer.concat(chunk).toString();
-        console.log(content);
-        // if(id && path && name){
-        // var con = new WebSocket('wss://server.moddereducation.com/'+id), t, content = "";
-        // con.onopen = function(){
-        //   con.send('saveFiles->'+path+name);
-        //   t = setTimeout(() => {
-        //     res.writeHead(400);
-        //     res.end('Error');
-        //     con.close();
-        //   }, 10000);
-        // }
-        // con.onmessage = function(msg){
-        //   var data = msg.data;
-        //     if(data == 'Suc: saveFile->'+path+name){
-        //       res.writeHead(200, {
-        //         'Content-Type': 'text/plain',
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Access-Control-Allow-Headers': 'access-control-allow-origin'
-        //       });
-        //       res.end(content);
-        //       con.close();
-        //       clearTimeout(t);
-        //     } else if(data == 'Err: saveFile->'+path+name) {
-        //       res.writeHead(400);
-        //       res.end('Error');
-        //       con.close();
-        //       clearTimeout(t);
-        //     } else if(data == "whatCont?"){
-        //       ws.send('content:'+cont);
-        //     }
-        //   };
-        // } else {
-        //   res.writeHead(400);
-        //   res.end('Not Found');
-        // }
+        var params = new URLSearchParams(content);
+        var id = params.get('id');
+        var path = params.get('path');
+        var name = params.get('name');
+        var fileContent = params.get('fcont').replaceAll('%26', '&');
+        if(id && path && name && fileContent){
+          var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
+          con.onopen = function(){
+            con.send('saveFiles->'+path+name);
+            t = setTimeout(() => {
+              res.writeHead(400);
+              res.end('Error');
+              con.close();
+            }, 10000);
+          }
+          con.onmessage = function(msg){
+            var data = msg.data;
+            if(data == 'Suc: saveFile->'+path+name){
+              res.writeHead(200, {
+                'Content-Type': 'text/plain',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'access-control-allow-origin'
+              });
+              res.end('Success');
+              con.close();
+              clearTimeout(t);
+            } else if(data == 'Err: saveFile->'+path+name) {
+              res.writeHead(400);
+              res.end('Error');
+              con.close();
+              clearTimeout(t);
+            } else if(data == "whatCont?"){
+              ws.send('content:'+cont);
+            }
+          };
+        } else {
+          res.writeHead(400);
+          res.end('Not Found');
+        }
       });
     }
   } else {
@@ -373,28 +377,34 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
-    if(!msg.toString().includes("chunk:")){
-      if(msg.toString().includes("getMem")){
-        broadcast(msg.toString(), req.url, 'host');
-      } else if(msg.toString().includes("listFiles->")){
-        broadcast(msg.toString(), req.url, 'host');
-      } else if(msg.toString().includes("renameFile->")){
-        broadcast(msg.toString(), req.url, 'host');
-      } else if(msg.toString().includes("deleteFile->")){
-        broadcast(msg.toString(), req.url, 'host');
-      } else if(msg.toString().includes("deleteFolder->")){
-        broadcast(msg.toString(), req.url, 'host');
-      } else if(msg.toString().includes("createFile->")){
-        broadcast(msg.toString(), req.url, 'host');
-      } else if(msg.toString().includes("createFolder->")){
-        broadcast(msg.toString(), req.url, 'host');
-      } else if(msg.toString().includes("getFiles->")){
-        broadcast(msg.toString(), req.url, 'host');
+    if(msg.substr(0, 8) != "content:"){
+      if(!msg.toString().includes("chunk:")){
+        if(msg.toString().includes("getMem")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else if(msg.toString().includes("listFiles->")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else if(msg.toString().includes("renameFile->")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else if(msg.toString().includes("deleteFile->")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else if(msg.toString().includes("deleteFolder->")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else if(msg.toString().includes("createFile->")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else if(msg.toString().includes("createFolder->")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else if(msg.toString().includes("getFiles->")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else if(msg.toString().includes("saveFiles->")){
+          broadcast(msg.toString(), req.url, 'host');
+        } else {
+          broadcast(msg.toString(), req.url, 'user');
+        }
       } else {
         broadcast(msg.toString(), req.url, 'user');
       }
     } else {
-      broadcast(msg.toString(), req.url, 'user');
+      broadcast(msg.toString(), req.url, 'host');
     }
   })
 });
