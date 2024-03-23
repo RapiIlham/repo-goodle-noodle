@@ -288,8 +288,8 @@ const server = http.createServer(async (req, res) => {
         }, 5000);
       }
       con.onmessage = function(msg){
-        var data = msg.data, content;
-        if(!data.includes('chunk:')){
+        var data = msg.data, content = "";
+        if(!data.includes('chunk:') && content != ""){
           if(data == 'Suc: getFile->'+path+name){
             res.writeHead(200, {
               'Content-Type': 'text/plain',
@@ -306,8 +306,7 @@ const server = http.createServer(async (req, res) => {
             clearTimeout(t);
           }
         } else {
-          console.log(data.substr(6));
-          content = data.substr(6);
+          content += data.substr(6);
         }
       }
     } else {
