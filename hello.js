@@ -317,7 +317,7 @@ const server = http.createServer(async (req, res) => {
       // });
       var form = new formidable.IncomingForm();
       form.parse(req, function(err, fields, files) {
-        console.log(fields, files);
+        console.log(fields.fcont, files);
       });
       // req.on('end', () => {
         // const content = Buffer.concat(chunk).toString();
