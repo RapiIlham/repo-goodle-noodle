@@ -289,7 +289,6 @@ const server = http.createServer(async (req, res) => {
       }
       con.onmessage = function(msg){
         var data = msg.data;
-        console.log(data.substr(0, 6));
           if(data == 'Suc: getFile->'+path+name){
             res.writeHead(200, {
               'Content-Type': 'text/plain',
@@ -308,9 +307,49 @@ const server = http.createServer(async (req, res) => {
             content += data.substr(6);
           }
       };
-    } else {
-      res.writeHead(400);
-      res.end('Not Found');
+    } else if(req.url.includes('saveFiles')){
+    if(req.method == "POST"){
+      req.on('data', (chunks) => {
+        chunk.push(chunks);
+      });
+      req.on('end', () => {
+        const content = Buffer.concat(chunk).toString();
+        console.log(content);
+        // if(id && path && name){
+        // var con = new WebSocket('wss://server.moddereducation.com/'+id), t, content = "";
+        // con.onopen = function(){
+        //   con.send('saveFiles->'+path+name);
+        //   t = setTimeout(() => {
+        //     res.writeHead(400);
+        //     res.end('Error');
+        //     con.close();
+        //   }, 10000);
+        // }
+        // con.onmessage = function(msg){
+        //   var data = msg.data;
+        //     if(data == 'Suc: saveFile->'+path+name){
+        //       res.writeHead(200, {
+        //         'Content-Type': 'text/plain',
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Access-Control-Allow-Headers': 'access-control-allow-origin'
+        //       });
+        //       res.end(content);
+        //       con.close();
+        //       clearTimeout(t);
+        //     } else if(data == 'Err: saveFile->'+path+name) {
+        //       res.writeHead(400);
+        //       res.end('Error');
+        //       con.close();
+        //       clearTimeout(t);
+        //     } else if(data == "whatCont?"){
+        //       ws.send('content:'+cont);
+        //     }
+        //   };
+        // } else {
+        //   res.writeHead(400);
+        //   res.end('Not Found');
+        // }
+      });
     }
   } else {
     res.writeHead(400);
