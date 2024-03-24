@@ -22,11 +22,21 @@ jobs:
     - name: Install dependencies
       run: npm install ws express formidable --save
 
-    - uses: gautamkrishnar/keepalive-workflow@v2
-      with:
-        gh_token: ${{ secrets.TOKEN_GITHUB }}
-        committer_username: RapiIlham
-        committer_email: t.eratmbl1@gmail.com
+    # - uses: gautamkrishnar/keepalive-workflow@v2
+    #   with:
+    #     gh_token: ${{ secrets.TOKEN_GITHUB }}
+    #     committer_username: RapiIlham
+    #     committer_email: t.eratmbl1@gmail.com
+
+    - name: Git config
+      run: |
+        git config --global user.email "t.eratmbl1@gmail.com"
+        git config --global user.name "RapiIlham"
+
+    - name: Commit and push
+      run: |
+        git commit -am "Keep repository active"
+        git push origin main
 
     - name: Create WebSocket server
       run: node hello.js
