@@ -389,7 +389,7 @@ wss.on('connection',(client, req)=>{
     console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
-    if(!msg.includes("content(")){
+    if(!msg.toString().substr(0, 8) == "content("){
       if(!msg.toString().includes("chunk:")){
         if(msg.toString().includes("getMem")){
           broadcast(msg.toString(), req.url, 'host');
