@@ -20,7 +20,7 @@ jobs:
         sudo systemctl start cloudflared
 
     - name: Install dependencies
-      run: npm install ws express formidable --save
+      run: npm install ws express formidable @octokit/rest dotenv --save
 
     # - uses: gautamkrishnar/keepalive-workflow@v2
     #   with:
@@ -28,14 +28,8 @@ jobs:
     #     committer_username: RapiIlham
     #     committer_email: t.eratmbl1@gmail.com
 
-    - name: Commit and Push Changes
-      uses: EndBug/add-and-commit@v7
-      with:
-        author_name: RapiIlham
-        author_email: t.eratmbl1@gmail.com
-        message: "Auto commit: Updated last_commit.txt"
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+    - name: create commit
+      run: node commit.js
           
     - name: Create WebSocket server
       run: node hello.js
