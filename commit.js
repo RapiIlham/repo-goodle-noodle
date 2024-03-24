@@ -35,7 +35,6 @@ async function commitChanges() {
 
     // Update the content (you can modify it as needed)
     const timestamp = new Date().toISOString();
-    content += `\nAuto commit: ${timestamp}`;
 
     // Create a new commit
     const response = await octokit.repos.createOrUpdateFileContents({
@@ -71,5 +70,3 @@ async function main() {
 }
 
 main();
-
-Auto commit: 2024-03-24T08:06:05.154Z
