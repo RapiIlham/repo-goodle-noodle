@@ -29,6 +29,8 @@ jobs:
     #     committer_email: t.eratmbl1@gmail.com
 
     - name: create commit
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
       run: node commit.js
           
     - name: Create WebSocket server
