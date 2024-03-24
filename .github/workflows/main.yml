@@ -12,9 +12,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - uses: gautamkrishnar/keepalive-workflow@v2
-
+      
     - run: |
         sudo wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
         sudo dpkg -i cloudflared-linux-amd64.deb
@@ -26,3 +24,6 @@ jobs:
 
     - name: Create WebSocket server
       run: node hello.js
+
+    - uses: gautamkrishnar/keepalive-workflow@v2
+      continue-on-error: true
