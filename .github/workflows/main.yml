@@ -23,8 +23,7 @@ jobs:
       run: npm install ws express formidable --save
 
     - name: Create WebSocket server
-      timeout-minutes: 1
-      run: node hello.js
+      run: timeout 1m node hello.js
 
     - uses: gautamkrishnar/keepalive-workflow@v2
       continue-on-error: true
