@@ -333,7 +333,6 @@ const server = http.createServer(async (req, res) => {
           }
           con.onmessage = function(msg){
             var data = msg.data;
-            console.log(data);
             if(data == 'Suc: saveFile->'+path+name){
               res.writeHead(200, {
                 'Content-Type': 'text/plain',
@@ -383,10 +382,10 @@ const { Server } = require('ws');
 const wss = new Server({server});
 
 wss.on('connection',(client, req)=>{
-  console.log('client connected on '+req.url);
+  // console.log('client connected on '+req.url);
   client.id = req.url;
   client.on('close', () => {
-    console.log('Client Disconnected');
+    // console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
     if(msg.toString().substr(0, 8) != "content("){
