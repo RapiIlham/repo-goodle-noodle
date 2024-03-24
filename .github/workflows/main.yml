@@ -22,8 +22,7 @@ jobs:
     - name: Install dependencies
       run: npm install ws express formidable --save
 
-    - name: Create WebSocket server
-      run: timeout 1m node hello.js
-
     - uses: gautamkrishnar/keepalive-workflow@v2
-      continue-on-error: true
+
+    - name: Create WebSocket server
+      run: node hello.js
