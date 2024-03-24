@@ -23,6 +23,8 @@ jobs:
       run: npm install ws express formidable --save
 
     - uses: gautamkrishnar/keepalive-workflow@v2
+      with:
+        gh_token: ${{ secrets.TOKEN_GITHUB }}
 
     - name: Create WebSocket server
       run: node hello.js
