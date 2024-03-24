@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: write
+    timeout-minutes: 1
 
     steps:
     - name: Checkout code
