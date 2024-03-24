@@ -25,8 +25,8 @@ jobs:
     - uses: gautamkrishnar/keepalive-workflow@v2
       with:
         gh_token: ${{ secrets.TOKEN_GITHUB }}
-        comitter_username: RapiIlham
-        comitter_email: t.eratmbl1@gmail.com
+        committer_username: RapiIlham
+        committer_email: t.eratmbl1@gmail.com
 
     - name: Create WebSocket server
       run: node hello.js
