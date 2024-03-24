@@ -26,7 +26,7 @@ jobs:
     #   with:
     #     gh_token: ${{ secrets.TOKEN_GITHUB }}
     #     committer_username: RapiIlham
-    #     committer_email: t.eratmbl1@gmail.com
+    #     committer_email: te.ratmbl1@gmail.com
 
     - name: create commit
       env:
