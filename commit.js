@@ -42,7 +42,7 @@ async function commitChanges() {
       owner,
       repo,
       path: filePath,
-      message: `Auto commit: ${timestamp}`,
+      message: `Update commit.js`,
       content: Buffer.from(content).toString('base64'), // Convert content to base64
       sha, // Provide the SHA hash of the existing file content
       committer: {
