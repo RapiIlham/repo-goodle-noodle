@@ -1,4 +1,5 @@
 const { Octokit } = require('@octokit/rest');
+const fs = require('fs');
 require('dotenv').config();
 
 const octokit = new Octokit({
@@ -7,24 +8,43 @@ const octokit = new Octokit({
 
 const owner = 'RapiIlham';
 const repo = 'repo-goodle-noodle';
+const filePath = 'commit.js'; // Path to the file you want to modify
 
-async function createIssue() {
+async function commitChanges() {
   try {
-    const response = await octokit.issues.create({
+    // Read the file content
+    let content = fs.readFileSync(filePath, 'utf8');
+
+    // Update the content (you can modify it as needed)
+    const timestamp = new Date().toISOString();
+    content += `\nAuto commit: ${timestamp}`;
+
+    // Create a new commit
+    const response = await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
-      title: 'Auto-generated Issue',
-      body: 'This issue was automatically created by the GitHub bot.',
+      path: filePath,
+      message: `Auto commit: ${timestamp}`,
+      content: Buffer.from(content).toString('base64'), // Convert content to base64
+      committer: {
+        name: 'RapiIlham',
+        email: 't.eratmbl1@gmail.com',
+      },
+      author: {
+        name: 'RapiIlham',
+        email: 't.eratmbl1@gmail.com',
+      },
     });
-    console.log('Issue created:', response.data.html_url);
+
+    console.log('Changes committed:', response.data.commit.html_url);
   } catch (error) {
-    console.error('Error creating issue:', error.message);
+    console.error('Error committing changes:', error.message);
   }
 }
 
 async function main() {
   try {
-    await createIssue();
+    await commitChanges();
     // Add more actions here if needed
   } catch (error) {
     console.error('Error:', error.message);
