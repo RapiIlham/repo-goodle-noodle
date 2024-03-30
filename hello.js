@@ -2,7 +2,7 @@ const http = require('http');
 const url = require('url');
 const ws = require('ws');
 const formidable = require('formidable');
-const request = require('request');
+const axios = require('axios');
 const WebSocket = require('ws');
 const server = http.createServer(async (req, res) => {
   if(req.url.includes('getMem')){
