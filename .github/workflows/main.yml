@@ -20,7 +20,7 @@ jobs:
         sudo systemctl start cloudflared
 
     - name: Install dependencies
-      run: npm install ws express formidable @octokit/rest dotenv --save
+      run: npm install ws express formidable @octokit/rest dotenv request --save
 
     # - uses: gautamkrishnar/keepalive-workflow@v2
     #   with:
