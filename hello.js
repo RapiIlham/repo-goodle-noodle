@@ -2,6 +2,7 @@ const http = require('http');
 const url = require('url');
 const ws = require('ws');
 const formidable = require('formidable');
+const request = require('request);
 const WebSocket = require('ws');
 const server = http.createServer(async (req, res) => {
   if(req.url.includes('getMem')){
@@ -388,34 +389,46 @@ wss.on('connection',(client, req)=>{
     // console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
-    if(msg.toString().substr(0, 8) != "content("){
-      if(!msg.toString().includes("chunk:")){
-        if(msg.toString().includes("getMem")){
-          broadcast(msg.toString(), req.url, 'host');
-        } else if(msg.toString().includes("listFiles->")){
-          broadcast(msg.toString(), req.url, 'host');
-        } else if(msg.toString().includes("renameFile->")){
-          broadcast(msg.toString(), req.url, 'host');
-        } else if(msg.toString().includes("deleteFile->")){
-          broadcast(msg.toString(), req.url, 'host');
-        } else if(msg.toString().includes("deleteFolder->")){
-          broadcast(msg.toString(), req.url, 'host');
-        } else if(msg.toString().includes("createFile->")){
-          broadcast(msg.toString(), req.url, 'host');
-        } else if(msg.toString().includes("createFolder->")){
-          broadcast(msg.toString(), req.url, 'host');
-        } else if(msg.toString().includes("getFiles->")){
-          broadcast(msg.toString(), req.url, 'host');
-        } else if(msg.toString().includes("saveFiles->")){
-          broadcast(msg.toString(), req.url, 'host');
+    if(msg.toString() != "forward"){
+      if(msg.toString().substr(0, 8) != "content("){
+        if(!msg.toString().includes("chunk:")){
+          if(msg.toString().includes("getMem")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("listFiles->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("renameFile->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("deleteFile->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("deleteFolder->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("createFile->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("createFolder->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("getFiles->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("saveFiles->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else {
+            broadcast(msg.toString(), req.url, 'user');
+          }
         } else {
           broadcast(msg.toString(), req.url, 'user');
         }
       } else {
-        broadcast(msg.toString(), req.url, 'user');
+        broadcast(msg.toString(), req.url, 'host');
       }
     } else {
-      broadcast(msg.toString(), req.url, 'host');
+      request.post(
+          'http://www.yoursite.com/formpage',
+          { json: { key: 'value' } },
+          function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                  console.log(body);
+              }
+          }
+      );
     }
   })
 });
