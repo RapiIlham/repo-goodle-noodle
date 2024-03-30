@@ -421,15 +421,11 @@ wss.on('connection',(client, req)=>{
       }
     } else {
       console.log('forward');
-      request.post(
-          'https://71852867-7c3e-43d1-b105-c921b1a36268-00-dmdkgm8vaqdy.sisko.replit.dev/System/usedMinutes.php',
-          { json: { id: req.url.split('-')[0].substr(1) } },
-          function (error, response, body) {
-              if (!error && response.statusCode == 200) {
-                  console.log(body);
-              }
-          }
-      );
+      var fd = new FormData();
+      fd.append('id', req.url.split('-')[0].substr(1));
+      axios.post('https://71852867-7c3e-43d1-b105-c921b1a36268-00-dmdkgm8vaqdy.sisko.replit.dev/System/usedMinutes.php, fd).then((res) => {
+        console.log('forward success');
+      }).catch(err => console.log(err););
     }
   })
 });
