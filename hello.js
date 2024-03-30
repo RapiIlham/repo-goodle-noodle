@@ -425,7 +425,7 @@ wss.on('connection',(client, req)=>{
           { json: { id: req.url.split('-')[0].substr(1) } },
           function (error, response, body) {
               if (!error && response.statusCode == 200) {
-                  // Do nothing
+                  console.log(body);
               }
           }
       );
