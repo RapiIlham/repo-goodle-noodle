@@ -423,7 +423,7 @@ wss.on('connection',(client, req)=>{
       console.log('forward');
       var fd = new FormData();
       fd.append('id', req.url.split('-')[0].substr(1));
-      axios.post('https://71852867-7c3e-43d1-b105-c921b1a36268-00-dmdkgm8vaqdy.sisko.replit.dev/System/usedMinutes.php, fd).then((res) => {
+      axios.post('https://71852867-7c3e-43d1-b105-c921b1a36268-00-dmdkgm8vaqdy.sisko.replit.dev/System/usedMinutes.php', fd).then((res) => {
         console.log('forward success');
       }).catch(err => console.log(err););
     }
