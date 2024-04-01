@@ -310,7 +310,7 @@ const server = http.createServer(async (req, res) => {
           }
       };
     }
-  } else if(req.url.includes('uploadFiles')){
+  } else if(req.url.includes('saveFiles')){
     if(req.method == "POST"){
       var chunk = [];
       // req.on('data', (chunks) => {
