@@ -407,7 +407,7 @@ const server = http.createServer(async (req, res) => {
               res.end('Error');
               con.close();
               clearTimeout(t);
-            } else if(data == "whatCont->"+path+name){
+            } else if(data == "whatConts->"+path+name){
               con.send('content('+path+name+'->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380'));
             }
           };
@@ -449,7 +449,7 @@ wss.on('connection',(client, req)=>{
   });
   client.on('message',(msg) => {
     if(msg.toString() != "forward"){
-      if(msg.toString().substr(0, 8) != "content("){
+      if(msg.toString().substr(0, 8) != "content(" || msg.toString().substr(0, 9) != "contents("){
         if(!msg.toString().includes("chunk:")){
           if(msg.toString().includes("getMem")){
             broadcast(msg.toString(), req.url, 'host');
