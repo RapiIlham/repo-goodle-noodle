@@ -448,6 +448,7 @@ wss.on('connection',(client, req)=>{
     // console.log('Client Disconnected');
   });
   client.on('message',(msg) => {
+    console.log(msg.toString());
     if(msg.toString() != "forward"){
       if(msg.toString().substr(0, 8) != "content(" || msg.toString().substr(0, 9) != "contents("){
         if(!msg.toString().includes("chunk:")){
