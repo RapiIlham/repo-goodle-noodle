@@ -408,7 +408,7 @@ const server = http.createServer(async (req, res) => {
               con.close();
               clearTimeout(t);
             } else if(data == "whatConts->"+path+name){
-              con.send('content('+path+name+'->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380'));
+              con.send('contents('+path+name+'->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380'));
             }
           };
         } else {
