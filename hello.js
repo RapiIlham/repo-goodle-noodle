@@ -310,7 +310,7 @@ const server = http.createServer(async (req, res) => {
           }
       };
     }
-  } else if(req.url.includes('saveFiles')){
+  } else if(req.url.includes('uploadFiles')){
     if(req.method == "POST"){
       var chunk = [];
       // req.on('data', (chunks) => {
@@ -344,6 +344,65 @@ const server = http.createServer(async (req, res) => {
               con.close();
               clearTimeout(t);
             } else if(data == 'Err: saveFile->'+path+name) {
+              res.writeHead(400);
+              res.end('Error');
+              con.close();
+              clearTimeout(t);
+            } else if(data == "whatCont->"+path+name){
+              con.send('content('+path+name+'->'+fileContent.replaceAll('%26', '&').replaceAll('->', '%380'));
+            }
+          };
+        } else {
+          res.writeHead(404);
+          res.end('Not Found');
+        }
+      });
+      // req.on('end', () => {
+        // const content = Buffer.concat(chunk).toString();
+        
+        // var params = new URLSearchParams(content);
+        // var id = params.get('id');
+        // var path = params.get('path');
+        // var name = params.get('name');
+        // var fileContent = params.get('fcont');
+        // console.log(content);
+        
+      // });
+    }
+  } else if(req.url.includes('uploadFile')){
+    if(req.method == "POST"){
+      var chunk = [];
+      // req.on('data', (chunks) => {
+      //   chunk.push(chunks);
+      // });
+      var form = new formidable.IncomingForm();
+      form.parse(req, function(err, fields, files) {
+        var id = fields.id.toString();
+        var path = fields.path.toString();
+        var name = fields.name.toString();
+        var fileContent = fields.fcont.toString();
+        if(id && path && name && fileContent){
+          var con = new WebSocket('wss://server.moddereducation.com/'+id), t;
+          con.onopen = function(){
+            con.send('uploadFiles->'+path+name);
+            t = setTimeout(() => {
+              res.writeHead(400);
+              res.end('Error');
+              con.close();
+            }, 10000);
+          }
+          con.onmessage = function(msg){
+            var data = msg.data;
+            if(data == 'Suc: uploadFile->'+path+name){
+              res.writeHead(200, {
+                'Content-Type': 'text/plain',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'access-control-allow-origin'
+              });
+              res.end('Success');
+              con.close();
+              clearTimeout(t);
+            } else if(data == 'Err: uploadFile->'+path+name) {
               res.writeHead(400);
               res.end('Error');
               con.close();
@@ -409,6 +468,8 @@ wss.on('connection',(client, req)=>{
           } else if(msg.toString().includes("getFiles->")){
             broadcast(msg.toString(), req.url, 'host');
           } else if(msg.toString().includes("saveFiles->")){
+            broadcast(msg.toString(), req.url, 'host');
+          } else if(msg.toString().includes("uploadFiles->")){
             broadcast(msg.toString(), req.url, 'host');
           } else {
             broadcast(msg.toString(), req.url, 'user');
