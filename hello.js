@@ -449,48 +449,48 @@ wss.on('connection',(client, req)=>{
   });
   client.on('message',(msg) => {
     console.log(msg.toString());
-    if(msg.toString() != "forward"){
-      if(msg.toString().substr(0, 8) != "content("){
-        if(msg.toString().substr(0, 9) != "contents("){
-          if(!msg.toString().includes("chunk:")){
-            if(msg.toString().includes("getMem")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("listFiles->")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("renameFile->")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("deleteFile->")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("deleteFolder->")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("createFile->")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("createFolder->")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("getFiles->")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("saveFiles->")){
-              broadcast(msg.toString(), req.url, 'host');
-            } else if(msg.toString().includes("uploadFiles->")){
-              broadcast(msg.toString(), req.url, 'host');
+    if(msg.toString().substr(0, 9) != "contents("){
+      if(msg.toString() != "forward"){
+        if(msg.toString().substr(0, 8) != "content("){
+            if(!msg.toString().includes("chunk:")){
+              if(msg.toString().includes("getMem")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("listFiles->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("renameFile->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("deleteFile->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("deleteFolder->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("createFile->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("createFolder->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("getFiles->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("saveFiles->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else if(msg.toString().includes("uploadFiles->")){
+                broadcast(msg.toString(), req.url, 'host');
+              } else {
+                broadcast(msg.toString(), req.url, 'user');
+              }
             } else {
               broadcast(msg.toString(), req.url, 'user');
             }
-          } else {
-            broadcast(msg.toString(), req.url, 'user');
-          }
         } else {
           broadcast(msg.toString(), req.url, 'host');
         }
       } else {
-        broadcast(msg.toString(), req.url, 'host');
+        var fd = new FormData();
+        fd.append('id', req.url.split('-')[0].substr(1));
+        axios.post('https://71852867-7c3e-43d1-b105-c921b1a36268-00-dmdkgm8vaqdy.sisko.replit.dev/System/usedMinutes.php', fd).then((res) => {
+          // console.log('forward success');
+        }).catch(err => { console.log(err); });
       }
     } else {
-      var fd = new FormData();
-      fd.append('id', req.url.split('-')[0].substr(1));
-      axios.post('https://71852867-7c3e-43d1-b105-c921b1a36268-00-dmdkgm8vaqdy.sisko.replit.dev/System/usedMinutes.php', fd).then((res) => {
-        // console.log('forward success');
-      }).catch(err => { console.log(err); });
+      broadcast(msg.toString(), req.url, 'host');
     }
   })
 });
