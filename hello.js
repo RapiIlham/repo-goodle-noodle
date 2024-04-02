@@ -397,10 +397,11 @@ const server = http.createServer(async (req, res) => {
               res.writeHead(200, {
                 'Content-Type': 'text/plain',
                 'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST',
                 'Access-Control-Allow-Headers': 'access-control-allow-origin'
               });
               res.end('Success');
-              con.close();
+              con.close();'
               clearTimeout(t);
             } else if(data == 'Err: uploadFile->'+path+name) {
               res.writeHead(400);
